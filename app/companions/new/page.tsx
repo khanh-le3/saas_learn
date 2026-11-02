@@ -1,10 +1,28 @@
-import React from "react";
-
+import { Suspense } from "react";
+import CompanionForm from "@/components/ui/CompanionForm";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export default function NewCompanion() {
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">Create New Companion</h1>
-    </div>
+    <Suspense fallback={<p role="status">Loading companion builder…</p>}>
+      <AuthenticatedCompanionBuilder />
+    </Suspense>
+  );
+}
+
+async function AuthenticatedCompanionBuilder() {
+  const { userId } = await auth();
+  if(!userId) redirect("/sign-in");
+
+  return ( 
+    <main className = "min-lg:w-1/3 min-md:w-2/3 items-center justify-center">
+      <article className = "w-full gap-4 flex flex-col">
+        <h1>
+          Companion Builder
+        </h1>
+        <CompanionForm />
+      </article>
+    </main>
   );
 }
