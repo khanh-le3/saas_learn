@@ -1,6 +1,7 @@
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+
 interface CompanionCardProps {
   id: string;
   name: string;
@@ -10,9 +11,9 @@ interface CompanionCardProps {
   color: string;
 }
 
-export default function CompanionCard({ id, name, topic, subject, duration, color }) {
+export default function CompanionCard({ id, name, topic, subject, duration, color }: CompanionCardProps) {
   return (
-    <article className="companion-card" style={{ backgroundColor: `#${color}` }}>
+    <article className="companion-card" style={{ backgroundColor: color.startsWith("#") ? color : `#${color}` }}>
       <div className = "flex justify-between items-center">
         <div className="subject-badge">{subject}</div>
         <button className="companion-bookmark">

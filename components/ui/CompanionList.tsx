@@ -20,7 +20,7 @@ export default function CompanionList({ title, companions, classNames }: Compani
   return (  
     <article className={cn('companion-list', classNames)}>
         <h2>
-            Recent Sessions
+            {title}
         </h2>
         <Table>
             <TableCaption>A list of your recent invoices.</TableCaption>
