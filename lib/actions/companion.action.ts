@@ -130,3 +130,22 @@ export const newCompanionPermission = async () => {
     }
     
 }
+
+export const handleBookmark = async(id: string, bookmarked: boolean) => {
+    const {userId} = await auth();
+    if (!userId) throw new Error('Sign in to update bookmarks.');
+    const supabase = createSupabaseClient();
+    const { data, error } = await supabase
+    .from('companions')
+    .update({ bookmarked : bookmarked })
+    .eq('id', id)
+    .eq('author', userId)
+    .select('bookmarked')
+    .single();
+
+    if (error||!data) {
+        throw new Error(error?.message || "Failed to update bookmark");
+    }
+    return data;
+                     
+}

@@ -4,7 +4,7 @@ import CompanionCard from '@/components/ui/CompanionCard';
 import { getSubjectColor } from '@/lib/utils';
 import SearchInput from '@/components/ui/Searchinput';
 import SubjectFilter from '@/components/ui/SubjectFilter';
-import React from 'react';
+import React from 'react';      
 
 const CompanionLibrary = ({ searchParams }: SearchParams) => {
     return(
@@ -21,24 +21,33 @@ const CompanionLibrary = ({ searchParams }: SearchParams) => {
                 </div>
             </section>
             <Suspense fallback={<p role="status">Loading companions...</p>}>
-                <CompanionResults searchParams={searchParams} />
+                <CompanionResults searchParams={searchParams}  />
             </Suspense>
         </main>
     )
 }
 
-async function CompanionResults({ searchParams }: SearchParams) {
+async function CompanionResults( { searchParams }: SearchParams) {
     const filters = await searchParams;
     const subject = filters.subject ? filters.subject : '';
     const topic = filters.topic ? filters.topic : '';
     const companions = await getAllCompanions({ subject, topic });
 
     return (
-        <section className="companions-grid">
-            {companions.map((companion) => (
-                <CompanionCard key={companion.id} {...companion}
-                color = {getSubjectColor(companion.subject)} />
-            ))}
+        <section>
+            <p className="text-lg font-semibold">Favorite Companions</p>
+            <section className="companions-grid gap-2 p-4">
+                {companions.filter((companion) => companion.bookmarked).map((companion) => (
+                    <CompanionCard key={companion.id} {...companion}
+                    color = {getSubjectColor(companion.subject)} />
+                ))}
+            </section>
+            <section className="companions-grid gap-2 p-4">
+                {companions.filter((companion) => !companion.bookmarked).map((companion) => (
+                    <CompanionCard key={companion.id} {...companion}
+                    color = {getSubjectColor(companion.subject)} />
+                ))}
+            </section>
         </section>
     );
 }

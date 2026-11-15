@@ -32,7 +32,7 @@ export default function CompanionList({ title, companions, classNames }: Compani
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {companions?.map(({id, subject, name, topic, duration}) => (
+                {companions?.map(({id, subject, name, topic, duration, bookmarked}) => (
                     <TableRow key={id}>
                         <TableCell>
                             <Link href={`/companions/${id}`} className="flex items-center gap-2">
@@ -57,7 +57,8 @@ export default function CompanionList({ title, companions, classNames }: Compani
                         <div className="subject-badge w-fit max-md:hidden">
                             {subject}
                         </div>
-                        <div className = "flex items-center justify-center rounded-lg w-fit p-2 md:hidden" style={{backgroundColor: getSubjectColor(subject)}}>
+                        <div className = "flex items-center justify-center rounded-lg w-fit p-2 md:hidden" 
+                        style={{backgroundColor: getSubjectColor(subject)}}>
                             <Image 
                             src={`/icons/${subject}.svg`}
                             alt={subject}

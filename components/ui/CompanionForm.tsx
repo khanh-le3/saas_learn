@@ -55,7 +55,6 @@ const formSchema = z.object({
     .number()
     .min(1, "Duration must be at least 1 minute.")
     .max(60, "Duration cannot exceed 60 minutes."),
-
 })
 
 export default function CompanionForm() {
