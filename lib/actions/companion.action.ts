@@ -4,7 +4,7 @@ import { createSupabaseClient } from "@/lib/supabase";
 
 export const createCompanion = async (formData: CreateCompanion) => {
     const  { userId: author   } = await auth();
-    const supabase = createSupabaseClient();
+    const supabase = await createSupabaseClient();
     const { data, error } = await supabase.from("companions").insert({
         ...formData,
         author
@@ -20,7 +20,7 @@ export const createCompanion = async (formData: CreateCompanion) => {
 export const getAllCompanions = async ({limit = 10, page =1, subject, topic}: GetAllCompanions ) => {
     const { userId } = await auth();
     if (!userId) return [];
-    const supabase = createSupabaseClient();
+    const supabase = await createSupabaseClient();
     let query = supabase.from("companions").select().eq('author', userId);
     if(subject && topic) {
         query = query.ilike('subject', `%${subject}%`)
@@ -40,7 +40,7 @@ export const getAllCompanions = async ({limit = 10, page =1, subject, topic}: Ge
 }
 
 export const getCompanion = async(id: string) => {
-    const supabase = createSupabaseClient();
+    const supabase = await createSupabaseClient();
     const {data, error} = await supabase
                                 .from('companions')
                                 .select()
@@ -57,7 +57,7 @@ export const addToSessionHistory = async (companionId: string) => {
     if (!companionId) throw new Error('A companion ID is required to save session history.');
     const { userId } = await auth();
     if (!userId) throw new Error('Sign in to save session history.');
-    const supabase = createSupabaseClient();
+    const supabase = await createSupabaseClient();
     const {data, error} = await supabase.from('SessionHistory').insert({
         companion_id: companionId,
         user_id: userId
@@ -69,7 +69,7 @@ export const addToSessionHistory = async (companionId: string) => {
 }
 
 export const getRecentSessions = async (limit =10) => {
-    const supabase = createSupabaseClient();
+    const supabase = await createSupabaseClient();
     const {data, error} = await supabase.from('SessionHistory')
     .select(`companions:companion_id(*)`)
     .order('created_at', { ascending: false }).limit(limit);
@@ -80,7 +80,7 @@ export const getRecentSessions = async (limit =10) => {
 }
 
 export const getUserSessions = async (userId: string, limit =10) => {
-    const supabase = createSupabaseClient();
+    const supabase = await createSupabaseClient();
     const {data, error} = await supabase.from('SessionHistory')
     .select(`companions:companion_id(*)`)
     .eq('user_id', userId)
@@ -92,7 +92,7 @@ export const getUserSessions = async (userId: string, limit =10) => {
 }
 
 export const getUserCompanions= async (userId: string) => {
-    const supabase = createSupabaseClient();
+    const supabase = await createSupabaseClient();
     const {data, error} = await supabase.from('companions')
     .select()
     .eq('author', userId)
@@ -104,7 +104,7 @@ export const getUserCompanions= async (userId: string) => {
 
 export const newCompanionPermission = async () => {
     const {userId, has} = await auth();
-    const supabase = createSupabaseClient();
+    const supabase = await createSupabaseClient();
     let limit = 10;
 
     if (has({plan: 'Premium'})) {
@@ -134,7 +134,7 @@ export const newCompanionPermission = async () => {
 export const handleBookmark = async(id: string, bookmarked: boolean) => {
     const {userId} = await auth();
     if (!userId) throw new Error('Sign in to update bookmarks.');
-    const supabase = createSupabaseClient();
+    const supabase = await createSupabaseClient();
     const { data, error } = await supabase
     .from('companions')
     .update({ bookmarked : bookmarked })

@@ -45,7 +45,6 @@ async function PopularCompanions() {
 
 async function RecentSessions() {
   const recentSessionsCompanions = await getRecentSessions(10);
-  const companions = await getRecentSessions(10);
   return (
     <CompanionList
       title="Recent Sessions"
